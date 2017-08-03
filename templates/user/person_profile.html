@@ -1,0 +1,77 @@
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>excel</title>
+    <script src="https://cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+
+    <!-- Latest compiled and minified Locales -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+
+</head>
+<body>
+<div id="container" style="width: 550px; height: 400px; margin: 0 auto"></div>
+<table id="table"></table>
+
+<script>
+    var log = console.log.bind(console)
+
+    var formatData = function (data) {
+        var l = []
+        for (var i = 0; i < data.length; i++) {
+            var m = data[i]
+            var d = {
+                'message': m.message,
+                'occur_time': m.occur_time,
+                'is_send': m.is_send,
+                'create_time': m.create_time,
+            }
+            l.push(d)
+        }
+        return l
+    }
+
+    var makeColums = function (arr) {
+        var l = []
+        for (var i = 0; i < arr.length; i++) {
+
+            d = {
+                'title': arr[i],
+                'field': arr[i]
+            }
+            log('dddddddd', d)
+            l.push(d)
+        }
+        return l
+    }
+
+    $.getJSON('/uploads/read_file', {}, function (raw) {
+        if (raw) {
+            log('raw', raw, Object.keys(raw[0]))
+            var clo = makeColums(Object.keys(raw[0]))
+            tableInit(raw, clo)
+        }
+    })
+    var tableInit = function (data, clo) {
+        log('clo', clo)
+        $('#table').bootstrapTable('destroy').bootstrapTable({
+            columns: clo,
+            data: data
+        });
+    }
+</script>
+</body>
+</html>
